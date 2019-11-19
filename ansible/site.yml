@@ -1,0 +1,14 @@
+---
+- import_playbook: gather-facts.yml
+
+- name: Apply role kubernetes
+  gather_facts: false
+  hosts:
+    - kube-master
+    - kube-worker
+    - kubernetes
+  serial: '{{ kolla_serial|default("0") }}'
+  roles:
+    - { role: kubernetes,
+        tags: kubernetes,
+        when: enable_kubernetes | bool }

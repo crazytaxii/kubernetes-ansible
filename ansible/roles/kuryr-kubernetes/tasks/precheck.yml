@@ -1,0 +1,20 @@
+---
+# - name: Ensure neutron-server avilable for kuryr-kubernetes
+#   wait:
+#     hosts: "{{ kolla_internal_fqdn }}"
+#     port: "{{ keystone_admin_port }}"
+#     connect_timeout: 1
+#     timeout: 1
+#     state: started
+#   when:
+#     - inventory_hostname in groups['kuryr-kubernetes-controller']
+
+# - name: Ensure kubernetes avilable for kuryr-kubernetes
+#   wait:
+#     hosts: "{{ kubernetes_apiserver_ip }}"
+#     port: "{{ kubernetes_apiserver_port }}"
+#     connect_timeout: 1
+#     timeout: 1
+#     state: started
+#   when:
+#     - inventory_hostname in groups['kuryr-kubernetes-controller']

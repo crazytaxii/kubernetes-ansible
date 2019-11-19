@@ -1,0 +1,74 @@
+---
+- name: Checking that kuryr-kubernetes-controller is not running
+  stat:
+    path=/etc/systemd/system/kuryr-kubernetes-controller.service
+  register: controller_result
+  when:
+    - inventory_hostname in groups['kuryr-kubernetes-controller']
+
+- name: Stop kuryr-kubernetes-controller services
+  become: true
+  service:
+    name: kuryr-kubernetes-controller
+    state: stopped
+  when:
+    - inventory_hostname in groups['kuryr-kubernetes-controller']
+    - controller_result.stat.exists
+
+- name: Checking that kuryr-kubernetes-cni is not running
+  stat:
+    path=/etc/systemd/system/kuryr-kubernetes-cni.service
+  register: cni_result
+  when:
+    - inventory_hostname in groups['kuryr-kubernetes-cni']
+
+- name: Stop kuryr-kubernetes-cni services
+  become: true
+  service:
+    name: kuryr-kubernetes-cni
+    state: stopped
+  when:
+    - inventory_hostname in groups['kuryr-kubernetes-cni']
+    - cni_result.stat.exists
+
+- name: Remove kuryr-kubernetes services
+  become: true
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/systemd/system/kuryr-kubernetes-controller.service
+    - /etc/systemd/system/kuryr-kubernetes-cni.service
+  when:
+    - inventory_hostname in groups['kuryr-kubernetes-controller'] or
+      inventory_hostname in groups['kuryr-kubernetes-cni']
+
+- name: Remove dependent packages for cni
+  become: true
+  pip:
+    name: "{{ cni_dependence_package }}"
+  when:
+    - inventory_hostname in groups["kuryr-kubernetes-cni"]
+
+- name: Uninstall kuryr-kubernetes packages
+  become: true
+  pip:
+    name: kuryr-kubernetes
+    state: absent
+  when:
+    - inventory_hostname in groups['kuryr-kubernetes-controller'] or
+      inventory_hostname in groups['kuryr-kubernetes-cni']
+
+- name: Ensuring config directories not exist
+  become: true
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "/etc/kuryr"
+    - "/opt/cni/bin/"
+    - "/etc/cni/net.d/"
+    - "/var/log/kuryr"
+  when:
+    - inventory_hostname in groups['kuryr-kubernetes-controller'] or
+      inventory_hostname in groups['kuryr-kubernetes-cni']

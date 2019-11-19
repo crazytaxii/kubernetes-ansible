@@ -1,0 +1,16 @@
+---
+#####################
+# kubernetes options
+#####################
+enable_kubernetes: "yes"
+kube_release: 1.15.2
+docker_release: 18.06.2
+
+dashboard_node_port: 31000
+
+cluster_cidr: "172.30.0.0/16"
+service_cidr: "10.254.0.0/16"
+
+# Network interface is optional, the default vaule
+# is eth0.
+network_interface: "eth0"

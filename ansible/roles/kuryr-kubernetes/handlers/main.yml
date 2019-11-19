@@ -1,0 +1,39 @@
+---
+- name: Reload daemon service
+  shell: systemctl daemon-reload
+  become: true
+  when:
+    - kolla_action != "config"
+    - inventory_hostname in groups['kuryr-kubernetes-controller'] or
+      inventory_hostname in groups['kuryr-kubernetes-cni']
+
+- name: Restart kuryr-kubernetes-controller service
+  vars:
+    service_name: "kuryr-kubernetes-controller"
+    service: "{{ kuryr_services[service_name] }}"
+  become: true
+  service:
+    name: kuryr-kubernetes-controller
+    state: restarted
+    enabled: yes
+  when:
+    - kolla_action != "config"
+    - inventory_hostname in groups[service.group]
+    - service.enabled | bool
+    - kuryr_confs.changed | bool
+
+- name: Restart kuryr-kubernetes-cni service
+  vars:
+    service_name: "kuryr-kubernetes-cni"
+    service: "{{ kuryr_services[service_name] }}"
+  become: true
+  service:
+    name: kuryr-kubernetes-cni
+    state: restarted
+    enabled: yes
+  when:
+    - kolla_action != "config"
+    - inventory_hostname in groups[service.group]
+    - service.enabled | bool
+    - kuryr_confs.changed | bool
+    - kuryr_cni_conf.changed | bool

@@ -1,0 +1,102 @@
+---
+- name: Ensuring config directories exist
+  become: true
+  file:
+    path: "{{ item }}"
+    state: "directory"
+  loop:
+    - "/etc/kuryr"
+    - "/opt/cni/bin/"
+    - "/etc/cni/net.d/"
+    - "/var/log/kuryr"
+  when:
+    - inventory_hostname in groups['kuryr-kubernetes-controller'] or
+      inventory_hostname in groups['kuryr-kubernetes-cni']
+
+- name: Link the CNI binary to CNI directory
+  become: true
+  vars:
+    service: "{{ kuryr_services['kuryr-kubernetes-cni'] }}"
+  file:
+    src: "/usr/bin/kuryr-cni"
+    dest: "/opt/cni/bin/kuryr-cni"
+    state: "link"
+  when:
+    - inventory_hostname in groups[service.group]
+    - service.enabled | bool
+
+- name: Copying over kuryr.confs
+  become: true
+  template:
+    src: "kuryr.conf.j2"
+    dest: "/etc/kuryr/kuryr.conf"
+    mode: "0660"
+  register: kuryr_confs
+  when:
+    - inventory_hostname in groups[item.value.group]
+    - item.value.enabled | bool
+  with_dict: "{{ kuryr_services }}"
+  notify:
+    - "Restart {{ item.key }} service"
+
+- name: Copying over 10-kuryr.conf
+  become: true
+  vars:
+    service: "{{ kuryr_services['kuryr-kubernetes-cni'] }}"
+  template:
+    src: "10-kuryr.conf.j2"
+    dest: "/etc/cni/net.d/10-kuryr.conf"
+  register: kuryr_cni_conf
+  when:
+    - inventory_hostname in groups[service.group]
+    - service.enabled | bool
+  notify:
+    -  Restart kuryr-kubernetes-cni service
+
+- name: Create kuryr-kubernetes-controller.service
+  become: true
+  vars:
+    service: "{{ kuryr_services['kuryr-kubernetes-controller'] }}"
+  copy:
+    content: |
+      [Unit]
+      Description=Kuryr Kubernetes Controller
+
+      [Service]
+      Type=simple
+      ExecStartPre=/usr/bin/rm -rf /etc/cni/net.d/10-flannel.conflist
+      ExecStart=/usr/bin/kuryr-k8s-controller --config-file /etc/kuryr/kuryr.conf -d
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/kuryr-kubernetes-controller.service
+  when:
+    - inventory_hostname in groups[service.group]
+    - service.enabled | bool
+  notify:
+    - Reload daemon service
+    - Restart kuryr-kubernetes-cni service
+
+- name: Create kuryr-kubernetes-cni.service
+  become: true
+  vars:
+    service: "{{ kuryr_services['kuryr-kubernetes-cni'] }}"
+  copy:
+    content: |
+      [Unit]
+      Description=Kuryr Kubernetes Cni
+
+      [Service]
+      Type=simple
+      ExecStartPre=/usr/bin/rm -rf /etc/cni/net.d/10-flannel.conflist
+      ExecStart=/usr/bin/kuryr-daemon --config-file /etc/kuryr/kuryr.conf -d
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/kuryr-kubernetes-cni.service
+  when:
+    - inventory_hostname in groups[service.group]
+    - service.enabled | bool
+  notify:
+    - Reload daemon service
+    - Restart kuryr-kubernetes-cni service

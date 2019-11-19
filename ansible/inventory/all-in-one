@@ -1,0 +1,19 @@
+[control]
+localhost    ansible_connection=local
+
+[compute]
+localhost    ansible_connection=local
+
+[baremetal:children]
+control
+compute
+
+[kube-master:children]
+control
+
+[kube-worker:children]
+compute
+
+[kubernetes:children]
+kube-master
+kube-worker

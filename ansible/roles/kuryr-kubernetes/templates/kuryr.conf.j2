@@ -1,0 +1,32 @@
+[DEFAULT]
+use_stderr = true
+debug = False
+log_dir=/var/log/kuryr
+
+[kubernetes]
+api_root = http://{{ kubernetes_apiserver }}:{{ kube_api_port }}
+
+# The comma-separated handlers that should be registered
+# for watching in the pipeline. default=['vif', 'lb', 'lbaasspec']
+enabled_handlers = vif,lbaasspec
+watch_connection_timeout = 300
+watch_read_timeout = 300
+
+[neutron]
+auth_url = {{ os_auth_url }}
+username = {{ os_username }}
+password = {{ os_password }}
+user_domain_name = Default
+project_name = admin
+project_domain_name = Default
+auth_type = password
+
+[neutron_defaults]
+ovs_bridge = br-int
+pod_security_groups = {{ pod_security_groups }}
+pod_subnet = {{ kubernetes_pod_subnet }}
+project = {{ kubernetes_project }}
+service_subnet = {{ kubernetes_service_subnet }}
+
+[oslo_concurrency]
+lock_path = /tmp

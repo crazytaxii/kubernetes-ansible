@@ -84,15 +84,3 @@
   run_once: True
   when:
     - enable_kubernetes | bool
-
-- name: Handler the kuryr-kubernetes stuffs
-  pip:
-    name:
-      - "kuryr-kubernetes=={{ kuryr_kubernetes_release }}"
-      - "oslo.privsep>=1.20.0"
-      - "os-vif>=1.5.0"
-    state: present
-  when:
-    - inventory_hostname in groups['kuryr-kubernetes-controller'] or
-      inventory_hostname in groups['kuryr-kubernetes-cni']
-    - enable_kuryr_kubernetes | bool

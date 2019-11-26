@@ -32,7 +32,7 @@
   when: inventory_hostname in groups['kubernetes']
 
 - name: Initialize kubernetes master
-  sdnhub_kube:
+  kube_toolbox:
     module_name: kubeadm
     module_args: init
     module_extra_vars:
@@ -46,7 +46,7 @@
 # get token-ca-cert-hash,
 # get the kube workers which need to added.
 - name: Get kubernetes cluster token
-  sdnhub_get:
+  kube_get:
     kube_workers: "{{ groups['kube-worker'] }}"
     get_list:
       - kube_apiserver
@@ -59,7 +59,7 @@
 - name: Add kube node into kubernetes cluster
   vars:
     kubeconfig: "{{ cluster_result.result }}"
-  sdnhub_kube:
+  kube_toolbox:
     module_name: kubeadm
     module_args: "join {{ kubeconfig.apiserver }}"
     module_extra_vars:
@@ -69,7 +69,7 @@
     - inventory_hostname in "{{ kubeconfig.workers_added }}"
 
 - name: Taint master node when it is the worker node too
-  sdnhub_kube:
+  kube_toolbox:
     module_name: kubectl
     module_args: "taint node {{ item }} node-role.kubernetes.io/master-"
   delegate_to: "{{ groups['kube-master'][0] }}"
@@ -86,7 +86,7 @@
         dest: "/tmp/kube-flannel.yml"
 
     - name: Deploy flanned plugin for pod
-      sdnhub_kube:
+      kube_toolbox:
         module_name: kubectl
         module_args: "apply -f /tmp/kube-flannel.yml"
   delegate_to: "{{ groups['kube-master'][0] }}"
@@ -100,7 +100,7 @@
         dest: "/tmp/dashboard.yml"
 
     - name: Deploy dashboard for kube cluster
-      sdnhub_kube:
+      kube_toolbox:
         module_name: kubectl
         module_args: "apply -f /tmp/dashboard.yml"
   run_once: True

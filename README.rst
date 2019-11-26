@@ -27,7 +27,7 @@ kubernetes-ansible
 2. 获取kubernetes-ansible:
     git clone https://github.com/yingjuncao/kubernetes-ansible
 
-3. 拷贝/etc/sdnhub 到部署节点的/etc目录下
+3. 拷贝/etc/kubernetes-ansible/ 到部署节点的/etc目录下
     cp -r  kubernetes-ansible/etc/kubernetes-ansible/ /etc/
 
 4. 拷贝ansible/inventory/multinod到工作目录，并配置主机信息，开启部署节点到其他节点的免密

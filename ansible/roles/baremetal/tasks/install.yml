@@ -46,7 +46,7 @@
         enabled: yes
 
     - name: Get kube images list by kubeadm config
-      sdnhub_docker:
+      kube_docker:
         kube_version: "{{ kube_version }}"
         image_action: get
       register: kube_images
@@ -58,7 +58,7 @@
       changed_when: false
 
     - name: Pull kube images for kubernetes nodes
-      sdnhub_docker:
+      kube_docker:
         kube_version: "{{ kube_version }}"
         kube_image: "{{ item.image_repo }}:{{ item.image_tag }}"
         image_action: pull

@@ -55,7 +55,7 @@ class DockerWorker(object):
     def images_exists(self):
         images = self.dc.images()
         return [image['RepoTags'][0]
-                for image in images]
+                for image in images if image['RepoTags']]
 
     def pull_image(self):
         if self.kube_image not in self.images_exists:

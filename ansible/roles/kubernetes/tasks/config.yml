@@ -10,9 +10,9 @@
       - {'name': ip_vs_rr}
   when: inventory_hostname in groups['kubernetes']
 
-- name: Apply loadbalnacer role
+- name: Apply loadbalancer role
   import_role:
-    role: loadbalnacer
+    role: loadbalancer
   when: enable_kubernetes_ha | bool
 
 - name: Setting sysctl values
@@ -77,7 +77,7 @@
       certificate-key: "{{ kubeconfig.certificate_key }}"
   when:
     - enable_kubernetes_ha | bool
-    - inventory_hostname in "{{ kubeconfig.kube_masters }}"
+    - inventory_hostname in "{{ kubeconfig.masters_added }}"
 
 - name: Add kube worker node into kubernetes cluster
   vars:

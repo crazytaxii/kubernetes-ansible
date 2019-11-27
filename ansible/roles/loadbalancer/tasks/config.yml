@@ -14,4 +14,8 @@
   become: true
   when: inventory_hostname in groups['kubernetes']
   notify:
+    - "Remove kube-loadbalancer container"
     - "Restart kube-loadbalancer container"
+
+- name: Flush handlers
+  meta: flush_handlers

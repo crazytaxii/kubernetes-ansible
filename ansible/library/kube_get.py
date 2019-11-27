@@ -110,8 +110,11 @@ class GetWoker(object):
         return kube_nodes
 
     def get_update_nodes(self):
+        kube_masters = self.params.get('kube_masters')
         kube_workers = self.params.get('kube_workers')
-        workers_added= list(set(kube_workers) - set(self.kube_nodes))
+        masters_added = list(set(kube_masters) - set(self.kube_nodes))
+        workers_added = list(set(kube_workers) - set(self.kube_nodes))
+        self.result['masters_added'] = masters_added
         self.result['workers_added'] = workers_added
 
     def run(self):
@@ -124,6 +127,7 @@ class GetWoker(object):
 
 def main():
     specs = dict(
+        kube_masters=dict(type='list', required=True),
         kube_workers=dict(type='list', required=True),
         get_list=dict(type='list', required=True),
         is_ha=dict(type='bool', default=False),

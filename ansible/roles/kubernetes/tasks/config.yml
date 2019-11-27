@@ -53,6 +53,7 @@
 # get the kube workers which need to added.
 - name: Get kubernetes cluster token and certs
   kube_get:
+    kube_masters: "{{ groups['kube-master'] }}"
     kube_workers: "{{ groups['kube-worker'] }}"
     get_list:
       - kube_apiserver
@@ -76,7 +77,7 @@
       certificate-key: "{{ kubeconfig.certificate_key }}"
   when:
     - enable_kubernetes_ha | bool
-    - inventory_hostname in groups['kube-master'][1:]
+    - inventory_hostname in "{{ kubeconfig.kube_masters }}"
 
 - name: Add kube worker node into kubernetes cluster
   vars:

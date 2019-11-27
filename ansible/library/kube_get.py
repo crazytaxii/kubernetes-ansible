@@ -19,6 +19,7 @@ author: Caoyingjun
 
 '''
 
+import os
 import subprocess
 import yaml
 
@@ -40,6 +41,7 @@ class GetWoker(object):
     def __init__(self, params):
         self.params = params
         self.get_list = self.params.get('get_list')
+        self.is_ha = self.params.get('is_ha')
         self.changed = False
 
         # Use this to store arguments to pass to exit_json()
@@ -85,6 +87,14 @@ class GetWoker(object):
 
         self.result['token_ca_cert_hash'] = token_ca_cert_hash[:-1]
 
+    def get_certificate_key(self):
+        if self.is_ha:
+            os.environ['KUBECONFIG'] = KUBEADMIN
+            cmd = 'kubeadm init phase upload-certs --upload-certs'
+            certificate_key = self._run(cmd)
+            certificate_key = certificate_key.split()[-1]
+            self.result['certificate_key'] = certificate_key
+
     def _run(self, cmd):
         proc = subprocess.Popen(cmd,
                                 stdout=subprocess.PIPE,
@@ -109,12 +119,14 @@ class GetWoker(object):
         self.get_update_nodes()
         self.get_token()
         self.get_token_ca_cert_hash()
+        self.get_certificate_key()
 
 
 def main():
     specs = dict(
         kube_workers=dict(type='list', required=True),
         get_list=dict(type='list', required=True),
+        is_ha=dict(type='bool', default=False),
     )
 
     module = AnsibleModule(argument_spec=specs, bypass_checks=True)

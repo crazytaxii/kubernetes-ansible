@@ -10,6 +10,11 @@
       - {'name': ip_vs_rr}
   when: inventory_hostname in groups['kubernetes']
 
+- name: Apply loadbalnacer role
+  import_role:
+    role: loadbalnacer
+  when: enable_kubernetes_ha | bool
+
 - name: Setting sysctl values
   become: true
   sysctl: name={{ item.name }} value={{ item.value }} sysctl_set=yes
@@ -39,24 +44,41 @@
       kubernetes-version: "{{ kube_version }}"
       pod-network-cidr: "{{ cluster_cidr }}"
       service-cidr: "{{ service_cidr }}"
+    is_ha: "{{ enable_kubernetes_ha | bool }}"
   delegate_to: "{{ groups['kube-master'][0] }}"
   run_once: True
 
 # Get the token, create it if not exists,
 # get token-ca-cert-hash,
 # get the kube workers which need to added.
-- name: Get kubernetes cluster token
+- name: Get kubernetes cluster token and certs
   kube_get:
     kube_workers: "{{ groups['kube-worker'] }}"
     get_list:
       - kube_apiserver
       - token
       - token_ca_cert_hash
+      - certificate_key
+    is_ha: "{{ enable_kubernetes_ha | bool }}"
   register: cluster_result
   delegate_to: "{{ groups['kube-master'][0] }}"
   run_once: True
 
-- name: Add kube node into kubernetes cluster
+- name: Add the rest of master nodes into highly available clusters
+  vars:
+    kubeconfig: "{{ cluster_result.result }}"
+  kube_toolbox:
+    module_name: kubeadm
+    module_args: "join {{ kubeconfig.apiserver }} --control-plane"
+    module_extra_vars:
+      token: "{{ kubeconfig.token }}"
+      discovery-token-ca-cert-hash: "{{ kubeconfig.token_ca_cert_hash }}"
+      certificate-key: "{{ kubeconfig.certificate_key }}"
+  when:
+    - enable_kubernetes_ha | bool
+    - inventory_hostname in groups['kube-master'][1:]
+
+- name: Add kube worker node into kubernetes cluster
   vars:
     kubeconfig: "{{ cluster_result.result }}"
   kube_toolbox:

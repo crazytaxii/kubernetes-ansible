@@ -34,6 +34,7 @@ class KubeWorker(object):
         self.params = params
         self.module_name = self.params.get('module_name')
         self.module_args = self.params.get('module_args')
+        self.is_ha = self.params.get('is_ha')
         self.changed = False
         # Use this to store arguments to pass to exit_json()
         self.result = {}
@@ -77,6 +78,9 @@ class KubeWorker(object):
         cmd = []
         cmd.append(self.module_name)
         cmd.append(self.module_args)
+        if self.is_ha:
+            control_cmd = '--control-plane-endpoint 127.0.0.1:8443 --upload-certs'
+            cmd.append(control_cmd)
 
         if self.params.get('module_extra_vars'):
             module_extra_vars = self.params.get('module_extra_vars')
@@ -131,6 +135,7 @@ def main():
         module_name=dict(type='str', required=True),
         module_args=dict(type='str', required=True),
         module_extra_vars=dict(type='json'),
+        is_ha=dict(type='bool', default=False)
     )
     module = AnsibleModule(argument_spec=specs, bypass_checks=True)
     params = module.params

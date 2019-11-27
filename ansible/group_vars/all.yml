@@ -15,3 +15,5 @@ kube_release: 1.15.2
 kube_version: "v{{ kube_release }}"
 
 docker_release: 18.06.2
+
+node_config_directory: "/etc/kubernetes-ansible/"

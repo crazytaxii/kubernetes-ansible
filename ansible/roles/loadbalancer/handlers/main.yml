@@ -4,11 +4,10 @@
     service_name: loadbalancer
     service: "{{ loadbalancer_services[service_name] }}"
   become: true
-  kolla_docker:
-    action: "recreate_or_restart_container"
-    common_options: "{{ docker_common_options }}"
-    name: "{{ service.container_name }}"
-    image: "{{ service.image }}"
-    volumes: "{{ service.volumes|reject('equalto', '')|list }}"
+  shell: docker run -d \
+           --name {{ service.container_name }} \
+           -v {{ loadbalancer_volumes }} \
+           --net host \
+           --restart=always {{ service.image }}
   when:
     - kolla_action != "config"

@@ -5,6 +5,7 @@
     service: "{{ loadbalancer_services[service_name] }}"
   become: true
   shell: docker rm {{ service.container_name }} -f
+  failed_when: false
 
 - name: Restart kube-loadbalancer container
   vars:

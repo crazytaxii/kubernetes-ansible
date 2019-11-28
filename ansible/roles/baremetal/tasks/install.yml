@@ -84,14 +84,3 @@
   run_once: True
   when:
     - enable_kubernetes | bool
-
-- name: Install pip command on all nodes
-  block:
-    - name: Copy pip script to all nodes
-      copy:
-        src: /tmp/get-pip.py
-        dest: /tmp/get-pip.py
-
-    - name: Install pip command on all nodes
-      shell: python /tmp/get-pip.py
-  when: inventory_hostname in groups['kubernetes']

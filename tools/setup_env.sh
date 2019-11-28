@@ -10,10 +10,6 @@ trusted-host =  mirrors.aliyun.com
 index-url = http://mirrors.aliyun.com/pypi/simple/
 EOF
 
-if [[ ! -f "/tmp/get-pip.py"  ]]; then
-    curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py  && python /tmp/get-pip.py
-fi
-
 if [[ ! -d "kubernetes-ansible" ]]; then
     git clone https://github.com/yingjuncao/kubernetes-ansible
     cp -r kubernetes-ansible/etc/kubernetes-ansible/ /etc/

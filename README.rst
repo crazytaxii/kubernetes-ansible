@@ -12,7 +12,7 @@ kubernetes-ansible
 通用配置
 =======
 
-1. 安装部署节点的依赖,获取https://github.com/yingjuncao/kubernetes-ansible/blob/master/tools/setup_env.sh，并在部署节点运行
+1. 安装部署节点的依赖,执行 curl https://raw.githubusercontent.com/yingjuncao/kubernetes-ansible/master/tools/setup_env.sh | bash
 
 2. 编辑当前目录的multinode，完成主机组配置，手动开通部署节点到工作节点的免密登陆，并用如下命令测试
    ansible -i multinode all -m ping

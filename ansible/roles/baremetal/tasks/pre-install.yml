@@ -54,3 +54,15 @@
   become: true
   when:
     - change_selinux | bool
+    - inventory_hostname in groups['baremetal']
+
+# Try to stop and disable firewalld service,
+# let it go when firewalld not exists.
+- name: Disable firewalld service
+  service:
+    name: firewalld
+    state: stopped
+    enabled: False
+  failed_when: false
+  when:
+    - inventory_hostname in groups['baremetal']

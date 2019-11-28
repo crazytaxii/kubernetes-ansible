@@ -3,7 +3,7 @@
 # kubernetes options
 #####################
 enable_kubernetes: "yes"
-enable_kubernetes_ha: "no"
+enable_kubernetes_ha: "yes"
 kube_release: 1.16.2
 docker_release: 18.06.2
 

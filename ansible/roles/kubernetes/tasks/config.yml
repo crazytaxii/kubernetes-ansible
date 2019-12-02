@@ -129,3 +129,35 @@
   run_once: True
   delegate_to: "{{ groups['kube-master'][0] }}"
   when: enable_dashboard | bool
+
+- name: Enable metrics-server for kubernetes cluster
+  block:
+    - name: Copy metrics-server yamls to the first master node
+      copy:
+        src: metrics-server
+        dest: /tmp/
+
+    - name: Apply metrics-server
+      kube_toolbox:
+        module_name: kubectl
+        module_args: "apply -f /tmp/metrics-server/"
+  run_once: True
+  when:
+    - inventory_hostname in groups['kube-master']
+    - enable_metrics_server | bool
+
+- name: Enable fluentd-elasticsearch for kubernetes cluster
+  block:
+    - name: Copy fluentd-elasticsearch yamls to the first master node
+      copy:
+        src: fluentd-elasticsearch
+        dest: /tmp/
+
+    - name: Apply fluentd-elasticsearch
+      kube_toolbox:
+        module_name: kubectl
+        module_args: "apply -f /tmp/fluentd-elasticsearch"
+  run_once: True
+  when:
+    - inventory_hostname in groups['kube-master']
+    - enable_fluentd_elasticsearch | bool

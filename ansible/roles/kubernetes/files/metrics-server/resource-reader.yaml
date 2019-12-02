@@ -12,12 +12,13 @@ rules:
   - pods
   - nodes
   - namespaces
+  - nodes/stats
   verbs:
   - get
   - list
   - watch
 - apiGroups:
-  - "extensions"
+  - "apps"
   resources:
   - deployments
   verbs:

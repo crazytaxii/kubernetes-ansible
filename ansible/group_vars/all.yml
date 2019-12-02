@@ -8,7 +8,8 @@ service_cidr: "10.254.0.0/16"
 
 enable_kubernetes: "yes"
 enable_kubernetes_ha: "yes"
-
+enable_metrics_server: "yes"
+enable_fluentd_elasticsearch: "yes"
 enable_dashboard: "yes"
 dashboard_node_port: 31000
 

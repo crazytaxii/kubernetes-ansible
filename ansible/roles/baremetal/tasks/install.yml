@@ -40,10 +40,13 @@
         enabled: yes
       changed_when: false
 
+    # Somethings service module invoke enable command failed,
+    # but I do not know the reason, use shell module to avoid.
+    # The failed message is
+    # Could not find the requested service kubelet: host
     - name: Enable kubelet service
-      service:
-        name: kubelet
-        enabled: yes
+      shell: systemctl enable kubelet
+      changed_when: false
 
     - name: Get kube images list by kubeadm config
       kube_docker:

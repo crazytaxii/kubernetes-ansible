@@ -30,8 +30,6 @@ kubernetes集群部署
    kube02
 
 2. 配置/etc/kubernetes-ansible/globals.yml
-   enable_kubernetes: "yes"
-   enable_kubernetes_ha: "yes" (开启高可用，默认是False)
 
    cluster_cidr: "172.30.0.0/16"
    service_cidr: "10.254.0.0/16"

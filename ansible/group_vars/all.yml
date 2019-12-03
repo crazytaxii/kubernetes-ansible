@@ -19,3 +19,7 @@ kube_version: "v{{ kube_release }}"
 docker_release: 18.06.2
 
 node_config_directory: "/etc/kubernetes-ansible/"
+
+metrics_server_images:
+  - k8s.gcr.io/metrics-server-amd64:v0.3.6
+  - k8s.gcr.io/addon-resizer:1.8.6

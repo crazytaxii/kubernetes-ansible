@@ -77,6 +77,17 @@
     - inventory_hostname in groups['kubernetes']
     - enable_kubernetes | bool
 
+- name: Pull metrics server images
+  kube_docker:
+    kube_version: "{{ kube_version }}"
+    kube_image: "{{ item }}"
+    image_action: pull
+    cleanup: True
+  loop: "{{ metrics_server_images }}"
+  when:
+    - inventory_hostname in groups['kubernetes']
+    - enable_metrics_server | bool
+
 - name: Install kubernetes package for first master node
   pip:
     name: kubernetes

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# This script can be used to interact with kolla via ansible.
+# This script can be used to interact with kubernetes via ansible.
 
 function find_base_dir {
     local real_path=$(python -c "import os;print(os.path.realpath('$0'))")
@@ -42,7 +42,6 @@ Options:
     --tags, -t <tags>                  Only run plays and tasks tagged with these values
     --skip-tags <tags>                 Only run plays and tasks whose tags do not match these values
     --extra, -e <ansible variables>    Set additional variables as key=value or YAML/JSON passed to ansible-playbook
-    --passwords <passwords_path>       Specify path to the passwords file
     --limit <host>                     Specify host to run plays
     --forks <forks>                    Number of forks to run Ansible with
     --vault-id <@prompt or path>       Specify @prompt or password file (Ansible >=  2.4)
@@ -52,16 +51,11 @@ Options:
 
 Commands:
     prechecks           Do pre-deployment checks for hosts
-    check               Do post-deployment smoke tests
     bootstrap-servers   Bootstrap servers with kolla deploy dependencies
     post-deploy         Do post deploy on deploy node
     destroy             Destroy Kolla containers, volumes and host configuration
-    deploy              Deploy and start all kolla containers
+    deploy              Deploy and start kubernetes cluster
     pull                Pull all images for containers (only pulls, no running container changes)
-    reconfigure         Reconfigure OpenStack service
-    stop                Stop Kolla containers
-    upgrade             Upgrades existing OpenStack Environment
-    genconfig           Generate configuration files for enabled OpenStack services
 EOF
 }
 
@@ -83,16 +77,11 @@ cat <<EOF
 --vault-password-file
 --verbose -v
 prechecks
-check
 bootstrap-servers
 destroy
 deploy
 post-deploy
 pull
-reconfigure
-stop
-upgrade
-genconfig
 EOF
 }
 
@@ -229,11 +218,6 @@ case "$1" in
         ACTION="Pre-deployment checking"
         EXTRA_OPTS="$EXTRA_OPTS -e kolla_action=precheck"
         ;;
-(check)
-        ACTION="Post-deployment checking"
-        EXTRA_OPTS="$EXTRA_OPTS -e kolla_action=check"
-        ;;
-
 (destroy)
         ACTION="Destroy Kolla containers, volumes and host configuration"
         EXTRA_OPTS="$EXTRA_OPTS -e kolla_action=destroy"
@@ -263,22 +247,6 @@ EOF
 (pull)
         ACTION="Pulling Docker images"
         EXTRA_OPTS="$EXTRA_OPTS -e kolla_action=pull"
-        ;;
-(upgrade)
-        ACTION="Upgrading OpenStack Environment"
-        EXTRA_OPTS="$EXTRA_OPTS -e kolla_action=upgrade -e kolla_serial=${ANSIBLE_SERIAL}"
-        ;;
-(reconfigure)
-        ACTION="Reconfigure OpenStack service"
-        EXTRA_OPTS="$EXTRA_OPTS -e kolla_action=reconfigure -e kolla_serial=${ANSIBLE_SERIAL}"
-        ;;
-(stop)
-        ACTION="Stop Kolla containers"
-        PLAYBOOK="${BASEDIR}/ansible/stop.yml"
-        ;;
-(genconfig)
-        ACTION="Generate configuration files for enabled OpenStack services"
-        EXTRA_OPTS="$EXTRA_OPTS -e kolla_action=config"
         ;;
 (bash-completion)
         bash_completion

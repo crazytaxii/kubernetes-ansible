@@ -23,7 +23,7 @@
       - "{{ item.image_repo }}"
       - "{{ item.image_tag }}"
   when:
-    - inventory_hostname in groups['kubernetes']
+    - inventory_hostname in groups[item.group]
 
 - name: Pull metrics server images
   kube_docker:

@@ -260,6 +260,10 @@ EOF
         ACTION="Post-Deploying Playbooks"
         PLAYBOOK="${BASEDIR}/ansible/post-deploy.yml"
         ;;
+(pull)
+        ACTION="Pulling Docker images"
+        EXTRA_OPTS="$EXTRA_OPTS -e kolla_action=pull"
+        ;;
 (upgrade)
         ACTION="Upgrading OpenStack Environment"
         EXTRA_OPTS="$EXTRA_OPTS -e kolla_action=upgrade -e kolla_serial=${ANSIBLE_SERIAL}"

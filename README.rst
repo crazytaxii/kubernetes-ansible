@@ -15,7 +15,7 @@ kubernetes-ansible
 
 1. 安装部署节点的依赖,执行
 
-curl https://raw.githubusercontent.com/yingjuncao/kubernetes-ansible/master/tools/setup_env.sh | bash
+   curl https://raw.githubusercontent.com/yingjuncao/kubernetes-ansible/master/tools/setup_env.sh | bash
 
 2. 编辑当前目录的multinode，完成主机组配置，手动开通部署节点到工作节点的免密登陆，并用如下命令测试
 
@@ -30,11 +30,9 @@ kubernetes集群部署
    vim multinode
    
    [control]
-   
    kube01
 
    [compute]
-   
    kube02
 
 2. 配置/etc/kubernetes-ansible/globals.yml
@@ -74,15 +72,11 @@ kubernetes cluster node扩容
    vim multinode
    
    [control]
-   
    kube1
 
    [compute]
+   kube[2:4]
    
-   kube[2:3]
-   
-   kube4
-
 3. 安装worker node的依赖包
 
    kubernetes-ansible -i multinode bootstrap-servers

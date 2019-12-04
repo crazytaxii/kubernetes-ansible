@@ -4,6 +4,9 @@ control01
 [compute]
 compute01
 
+[storage]
+compute01
+
 [baremetal:children]
 control
 compute
@@ -17,3 +20,24 @@ compute
 [kubernetes:children]
 kube-master
 kube-worker
+
+[ceph:children]
+control
+
+[ceph-mds:children]
+ceph
+
+[ceph-mgr:children]
+ceph
+
+[ceph-nfs:children]
+ceph
+
+[ceph-mon:children]
+ceph
+
+[ceph-rgw:children]
+ceph
+
+[ceph-osd:children]
+storage

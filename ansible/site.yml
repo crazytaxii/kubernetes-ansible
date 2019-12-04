@@ -1,6 +1,21 @@
 ---
 - import_playbook: gather-facts.yml
 
+- name: Apply role ceph
+  gather_facts: false
+  hosts:
+    - ceph-mds
+    - ceph-mgr
+    - ceph-mon
+    - ceph-nfs
+    - ceph-osd
+    - ceph-rgw
+  serial: '{{ kolla_serial|default("0") }}'
+  roles:
+    - { role: ceph,
+        tags: ceph,
+        when: enable_ceph | bool }
+
 - name: Apply role kubernetes
   gather_facts: false
   hosts:

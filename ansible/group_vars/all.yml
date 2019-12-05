@@ -88,3 +88,5 @@ storage_interface: "{{ network_interface }}"
 cluster_interface: "{{ network_interface }}"
 ceph_cluster_fsid: 3c485d4e-3942-4304-9ccc-50c4554cf5dc
 ceph_rgw_compatibility: "False"
+default_container_dimensions: {}
+kolla_install_type: "source"

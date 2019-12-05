@@ -28,7 +28,6 @@ metrics_server_images:
 # Kolla
 ########
 kolla_ceph_use_udev: True
-docker_common_options: {}
 enable_ceph: "no"
 enable_ceph_mds: "no"
 enable_ceph_nfs: "no"

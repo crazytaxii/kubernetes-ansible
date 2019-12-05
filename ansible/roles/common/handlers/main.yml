@@ -13,8 +13,6 @@
     volumes: "{{ service.volumes }}"
     environment: "{{ service.environment }}"
     dimensions: "{{ service.dimensions }}"
-  when:
-    - kolla_action != "config"
   notify:
     - Initializing toolbox container using normal user
 

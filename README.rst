@@ -97,3 +97,30 @@ kubernetes 清理集群
 
    ansible -i multinode all -m shell -a reboot
 
+=============
+Ceph 集群部署
+=============
+
+1. 配置工作目录下的multinode,根据实际情况添加主机信息到控制组和存储组
+
+   vim multinode
+
+   [control]
+   kube01
+
+   [storage]
+   kube02
+
+2. 配置/etc/kubernetes-ansible/globals.yml
+
+   enable_ceph: "yes"
+
+3. 为存储节点需要作为osd的盘进行parted标记
+
+   parted $DISK -s -- mklabel gpt mkpart KOLLA_CEPH_OSD_BOOTSTRAP_BS 1 -1
+
+   https://github.com/openstack/kolla-ansible/blob/stable/stein/doc/source/reference/storage/ceph-guide.rst
+
+4. 进行ceph集群的部署
+
+   kubernetes-ansible -i multinode deploy --tag ceph

@@ -24,15 +24,15 @@ metrics_server_images:
   - k8s.gcr.io/metrics-server-amd64:v0.3.6
   - k8s.gcr.io/addon-resizer:1.8.6
 
-########
-# Kolla
-########
+###############
+# Ceph options
+###############
+
 kolla_ceph_use_udev: True
 enable_ceph: "no"
 enable_ceph_mds: "no"
 enable_ceph_nfs: "no"
 enable_ceph_rgw_keystone: "no"
-ceph_pool_type: "replicated"
 ceph_cinder_pool_name: "volumes"
 ceph_cinder_backup_pool_name: "backups"
 ceph_glance_pool_name: "images"
@@ -89,3 +89,21 @@ cluster_interface: "{{ network_interface }}"
 ceph_cluster_fsid: 3c485d4e-3942-4304-9ccc-50c4554cf5dc
 ceph_rgw_compatibility: "False"
 default_container_dimensions: {}
+
+# Set the store type for ceph OSD
+# Valid options are [ filestore, bluestore]
+ceph_osd_store_type: "bluestore"
+
+# Valid options are [ ext4, btrfs, xfs ]
+ceph_osd_filesystem: "xfs"
+
+# Set to 'yes-i-really-really-mean-it' to force wipe disks with existing partitions for OSDs. Only
+# set if you understand the consequences!
+ceph_osd_wipe_disk: ""
+
+# These are /etc/fstab options. Comma separated, no spaces (see fstab(8))
+ceph_osd_mount_options: "defaults,noatime"
+
+# A requirement for using the erasure-coded pools is you must setup a cache tier
+# Valid options are [ erasure, replicated ]
+ceph_pool_type: "replicated"

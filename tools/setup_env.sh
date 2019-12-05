@@ -14,5 +14,5 @@ if [[ ! -d "kubernetes-ansible" ]]; then
     git clone https://github.com/yingjuncao/kubernetes-ansible
     cp -r kubernetes-ansible/etc/kubernetes-ansible/ /etc/
     cp kubernetes-ansible/ansible/inventory/multinode .
-    pip install kubernetes-ansible/
 fi
+pip install kubernetes-ansible/

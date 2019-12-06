@@ -88,7 +88,7 @@ class GetWoker(object):
         self.result['token_ca_cert_hash'] = token_ca_cert_hash[:-1]
 
     def get_certificate_key(self):
-        if self.is_ha:
+        if self.is_ha and self.result['masters_added']:
             os.environ['KUBECONFIG'] = KUBEADMIN
             cmd = 'kubeadm init phase upload-certs --upload-certs'
             certificate_key = self._run(cmd)

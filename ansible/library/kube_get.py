@@ -94,6 +94,8 @@ class GetWoker(object):
             certificate_key = self._run(cmd)
             certificate_key = certificate_key.split()[-1]
             self.result['certificate_key'] = certificate_key
+        else:
+            self.result['certificate_key'] = None
 
     def _run(self, cmd):
         proc = subprocess.Popen(cmd,

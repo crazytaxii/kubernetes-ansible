@@ -117,7 +117,7 @@ class GetWoker(object):
         masters_sets = set(kube_masters) - set(self.kube_nodes)
         workers_sets = set(kube_workers) - set(self.kube_nodes)
         self.result['masters_added'] = list(masters_sets)
-        self.result['workers_added'] = list(masters_sets - workers_sets)
+        self.result['workers_added'] = list(workers_sets - masters_sets)
 
     def run(self):
         self.get_kube_apiserver()

@@ -7,7 +7,7 @@ cluster_cidr: "172.30.0.0/16"
 service_cidr: "10.254.0.0/16"
 
 enable_kubernetes: "yes"
-enable_kubernetes_ha: "yes"
+enable_kubernetes_ha: "no"
 enable_metrics_server: "yes"
 enable_fluentd_elasticsearch: "yes"
 enable_dashboard: "yes"

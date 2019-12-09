@@ -3,7 +3,8 @@
 # kubernetes options
 #####################
 enable_kubernetes: "yes"
-enable_kubernetes_ha: "yes"
+enable_kubernetes_ha: "no"
+
 kube_release: 1.16.2
 docker_release: 18.06.2
 
@@ -15,3 +16,9 @@ service_cidr: "10.254.0.0/16"
 # Network interface is optional, the default vaule
 # is eth0.
 network_interface: "eth0"
+
+
+###############
+# Ceph Options
+###############
+enable_ceph: "no"

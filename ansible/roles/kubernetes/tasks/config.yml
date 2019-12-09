@@ -100,7 +100,6 @@
   changed_when: false
   when:
     - item in groups['kube-worker']
-    - enable_kubernetes_ha | bool
   loop: "{{ groups['kube-master'] }}"
 
 - name: Enable flanned plugins for kubernetes cluster

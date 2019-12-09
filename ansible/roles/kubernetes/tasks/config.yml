@@ -97,6 +97,7 @@
     module_args: "taint node {{ item }} node-role.kubernetes.io/master-"
   delegate_to: "{{ groups['kube-master'][0] }}"
   run_once: True
+  changed_when: false
   when:
     - item in groups['kube-worker']
     - enable_kubernetes_ha | bool

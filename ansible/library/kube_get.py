@@ -114,10 +114,10 @@ class GetWoker(object):
     def get_update_nodes(self):
         kube_masters = self.params.get('kube_masters')
         kube_workers = self.params.get('kube_workers')
-        masters_added = list(set(kube_masters) - set(self.kube_nodes))
-        workers_added = list(set(kube_workers) - set(self.kube_nodes))
-        self.result['masters_added'] = masters_added
-        self.result['workers_added'] = workers_added
+        masters_sets = set(kube_masters) - set(self.kube_nodes)
+        workers_sets = set(kube_workers) - set(self.kube_nodes)
+        self.result['masters_added'] = list(masters_sets)
+        self.result['workers_added'] = list(masters_sets - workers_sets)
 
     def run(self):
         self.get_kube_apiserver()

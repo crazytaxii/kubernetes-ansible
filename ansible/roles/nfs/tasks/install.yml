@@ -1,0 +1,10 @@
+---
+- name: Install nfs utils
+  vars:
+    nfs_packages:
+      - nfs-utils
+      - rpcbind
+  yum:
+    name: "{{ nfs_packages }}"
+    state: present
+  when: inventory_hostname in groups['storage']

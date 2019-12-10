@@ -1,2 +1,6 @@
 ---
+# - include_tasks: precheck.yml
+
+- include_tasks: install.yml
+
 - include_tasks: config.yml

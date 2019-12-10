@@ -1,1 +1,5 @@
 ---
+- name: Ensure nfs servers
+  msg: "nfs server should be only one"
+  failed_when: groups["storage"] | len  > 1
+  run_once: True

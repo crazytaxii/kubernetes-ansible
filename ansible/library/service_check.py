@@ -28,29 +28,27 @@ class ServiceCheck(object):
     def __init__(self, params):
         self.params = params
         self.service_name = self.params.get('service_name')
-        self.service_label = self.params.get('service_label')
         self.changed = False
 
     def _run(self, cmd):
         proc = subprocess.Popen(cmd,
                                 stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE,
-                                shell=True)
+                                stderr=subprocess.PIPE)
         stdout, _ = proc.communicate()
         return stdout
 
     def run(self):
-        check_cmd = 'showmount -e localhost'
+        check_cmd = ['systemctl', 'is-active']
+        check_cmd.append(self.service_name)
         stdout = self._run(check_cmd)
         # When service status is not active, that's means the service
         # should be started, set changed to True to notify started action.
-        if self.service_label not in stdout:
+        if not stdout.startswith('active'):
             self.changed = True
 
 def main():
     specs = dict(
         service_name=dict(type='str', required=True),
-        service_label=dict(type='str', required=True)
     )
 
     module = AnsibleModule(argument_spec=specs, bypass_checks=True)

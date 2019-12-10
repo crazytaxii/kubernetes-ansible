@@ -15,14 +15,17 @@
     - enable_nfs | bool
     - inventory_hostname in groups['storage']
   notify:
-    - Restart nfs-server service
+    - Restart nfs service
 
-- name: Check nfs-servers service status
+# Check service, start it if the status is not active.
+- name: Check nfs servers service status
   service_check:
-    service_name: nfs-servers
-    service_label: "{{ nfs_volume }}"
+    service_name: "{{ item }}"
   when:
     - enable_nfs | bool
     - inventory_hostname in groups['storage']
+  loop:
+    - rpcbind
+    - nfs
   notify:
-    - Restart nfs-server service
+    - Restart {{ item }} service

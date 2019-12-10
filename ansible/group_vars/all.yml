@@ -107,3 +107,9 @@ ceph_osd_mount_options: "defaults,noatime"
 # A requirement for using the erasure-coded pools is you must setup a cache tier
 # Valid options are [ erasure, replicated ]
 ceph_pool_type: "replicated"
+
+
+###############
+# Nfs Options
+###############
+enable_nfs: "no"

@@ -41,3 +41,6 @@ ceph
 
 [ceph-osd:children]
 storage
+
+[nfs-server:children]
+storage

@@ -22,3 +22,8 @@ network_interface: "eth0"
 # Ceph Options
 ###############
 enable_ceph: "no"
+
+##############
+# Nfs Options
+##############
+enable_nfs: "no"

@@ -1,3 +1,1 @@
 ---
-nfs_volume: /data/share
-nfs_cidr: 172.16.50.0/24

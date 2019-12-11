@@ -162,3 +162,21 @@
   when:
     - inventory_hostname in groups['kube-master']
     - enable_fluentd_elasticsearch | bool
+
+- name: Enable nfs provisioner for kubernetes cluster
+  block:
+    - name: Copy nfs provisioner to the first master node
+      template:
+        src: nfs-provisioner.yml.j2
+        dest: /tmp/nfs-provisioner.yml
+      register: kube_result
+
+    - name: Apply nfs-provisioner
+      kube_toolbox:
+        module_name: kubectl
+        module_args: "apply -f /tmp/nfs-provisioner.yml"
+      when: kube_result.changed | bool
+  run_once: True
+  when:
+    - inventory_hostname in groups['kube-master']
+    - enable_nfs_provisioner | bool

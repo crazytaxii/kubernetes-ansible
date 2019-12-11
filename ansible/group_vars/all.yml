@@ -3,6 +3,7 @@ network_interface: "eth0"
 api_interface: "{{ network_interface }}"
 api_interface_address: "{{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}"
 
+
 #####################
 # Kubernetes Options
 #####################
@@ -14,6 +15,7 @@ enable_kubernetes: "yes"
 enable_kubernetes_ha: "no"
 enable_metrics_server: "yes"
 enable_fluentd_elasticsearch: "yes"
+enable_nfs_provisioner: "no"
 enable_dashboard: "yes"
 dashboard_node_port: 31000
 
@@ -28,7 +30,13 @@ metrics_server_images:
   - k8s.gcr.io/metrics-server-amd64:v0.3.6
   - k8s.gcr.io/addon-resizer:1.8.6
 
+nfs_provisioner_images: quay.io/external_storage/nfs-client-provisioner:latest
+
+
 ###############
 # Nfs Options
 ###############
 enable_nfs: "no"
+
+nfs_volume: /data/share
+nfs_cidr: 172.16.50.0/24

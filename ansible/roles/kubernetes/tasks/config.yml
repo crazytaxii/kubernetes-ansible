@@ -102,50 +102,24 @@
     - item in groups['kube-worker']
   loop: "{{ groups['kube-master'] }}"
 
-- name: Enable flanned plugins for kubernetes cluster
-  block:
-    - name: Copy flanned template to the first master node
-      template:
-        src: kube-flannel.yml.j2
-        dest: "/tmp/kube-flannel.yml"
+- name: Apply kubernetes applications
+  vars:
+    kube_application: "{{ item.name }}"
+  include_role:
+    role: kubectl-apply
+  loop:
+    - {'name': kube-flannel, 'enabled': enable_flanned | bool}
+    - {'name': dashboard, 'enabled': enable_flanned | bool}
+    - {'name': metrics-server, 'enabled': enable_metrics_server | bool}
+    - {'name': nfs-provisioner, 'enabled': enable_nfs_provisioner | bool}
+  when: item.enabled
 
-    - name: Deploy flanned plugin for pod
-      kube_toolbox:
-        module_name: kubectl
-        module_args: "apply -f /tmp/kube-flannel.yml"
-  delegate_to: "{{ groups['kube-master'][0] }}"
-  run_once: True
-
-- name: Enable dashboard for kubernetes cluster
-  block:
-    - name: Copy dashboard template to the first master node
-      template:
-        src: dashboard.yml.j2
-        dest: "/tmp/dashboard.yml"
-
-    - name: Deploy dashboard for kube cluster
-      kube_toolbox:
-        module_name: kubectl
-        module_args: "apply -f /tmp/dashboard.yml"
-  run_once: True
-  delegate_to: "{{ groups['kube-master'][0] }}"
-  when: enable_dashboard | bool
-
-- name: Enable metrics-server for kubernetes cluster
-  block:
-    - name: Copy metrics-server yamls to the first master node
-      copy:
-        src: metrics-server
-        dest: /tmp/
-
-    - name: Apply metrics-server
-      kube_toolbox:
-        module_name: kubectl
-        module_args: "apply -f /tmp/metrics-server/"
-  run_once: True
-  when:
-    - inventory_hostname in groups['kube-master']
-    - enable_metrics_server | bool
+# - name: Apply fluentd elasticsearch applications
+#   vars:
+#     kube_application: fluentd-elasticsearch
+#   import_role:
+#     role: kubectl-apply
+#   when: enable_fluentd_elasticsearch | bool
 
 - name: Enable fluentd-elasticsearch for kubernetes cluster
   block:
@@ -162,21 +136,3 @@
   when:
     - inventory_hostname in groups['kube-master']
     - enable_fluentd_elasticsearch | bool
-
-- name: Enable nfs provisioner for kubernetes cluster
-  block:
-    - name: Copy nfs provisioner to the first master node
-      template:
-        src: nfs-provisioner.yml.j2
-        dest: /tmp/nfs-provisioner.yml
-      register: kube_result
-
-    - name: Apply nfs-provisioner
-      kube_toolbox:
-        module_name: kubectl
-        module_args: "apply -f /tmp/nfs-provisioner.yml"
-      when: kube_result.changed | bool
-  run_once: True
-  when:
-    - inventory_hostname in groups['kube-master']
-    - enable_nfs_provisioner | bool

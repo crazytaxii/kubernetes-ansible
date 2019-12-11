@@ -11,6 +11,7 @@ api_interface_address: "{{ hostvars[inventory_hostname]['ansible_' + api_interfa
 cluster_cidr: "172.30.0.0/16"
 service_cidr: "10.254.0.0/16"
 
+enable_flanned: "yes"
 enable_kubernetes: "yes"
 enable_kubernetes_ha: "no"
 enable_metrics_server: "yes"

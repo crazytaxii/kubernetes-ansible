@@ -105,6 +105,7 @@
 - name: Apply kubernetes applications
   vars:
     kube_application: "{{ item.name }}"
+    kube_enabled: "{{ item.enabled }}"
   include_role:
     role: kubectl-apply
   loop:
@@ -112,14 +113,6 @@
     - {'name': dashboard, 'enabled': enable_dashboard | bool}
     - {'name': metrics-server, 'enabled': enable_metrics_server | bool}
     - {'name': nfs-provisioner, 'enabled': enable_nfs_provisioner | bool}
-  when: item.enabled
-
-# - name: Apply fluentd elasticsearch applications
-#   vars:
-#     kube_application: fluentd-elasticsearch
-#   import_role:
-#     role: kubectl-apply
-#   when: enable_fluentd_elasticsearch | bool
 
 - name: Enable fluentd-elasticsearch for kubernetes cluster
   block:

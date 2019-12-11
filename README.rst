@@ -2,17 +2,9 @@
 kubernetes-ansible
 ==================
 
-=======
-系统要求
-=======
 
-.. code-block:: ini
-   系统：centos7
-   规则：k8s的node节点到master节点放通6443端口
-
-=======
 通用配置
-=======
+--------
 
 1. 安装部署节点的依赖,执行
 
@@ -26,9 +18,9 @@ kubernetes-ansible
 
    ansible -i multinode all -m ping
 
-=================
+==================
 kubernetes集群部署
-=================
+==================
 
 1. 配置工作目录下的multinode,根据实际情况添加主机信息
 

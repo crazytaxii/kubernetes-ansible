@@ -22,3 +22,8 @@ network_interface: "eth0"
 # Nfs Options
 ##############
 enable_nfs: "no"
+
+##################
+# Grafana Options
+##################
+enable_grafana: "no"

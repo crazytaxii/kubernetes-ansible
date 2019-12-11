@@ -42,3 +42,9 @@ enable_nfs: "no"
 
 nfs_volume: /data/share
 nfs_cidr: 172.16.50.0/24
+
+
+##################
+# Grafana Options
+##################
+enable_grafana: "yes"

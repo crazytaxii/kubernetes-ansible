@@ -5,9 +5,10 @@ kubernetes-ansible
 =======
 系统要求
 =======
-系统：centos7
 
-规则：k8s的node节点到master节点放通6443端口
+.. code-block:: ini
+   系统：centos7
+   规则：k8s的node节点到master节点放通6443端口
 
 =======
 通用配置

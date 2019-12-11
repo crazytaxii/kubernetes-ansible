@@ -3,6 +3,10 @@ network_interface: "eth0"
 api_interface: "{{ network_interface }}"
 api_interface_address: "{{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}"
 
+#####################
+# Kubernetes Options
+#####################
+
 cluster_cidr: "172.30.0.0/16"
 service_cidr: "10.254.0.0/16"
 
@@ -23,91 +27,6 @@ node_config_directory: "/etc/kubernetes-ansible/"
 metrics_server_images:
   - k8s.gcr.io/metrics-server-amd64:v0.3.6
   - k8s.gcr.io/addon-resizer:1.8.6
-
-###############
-# Ceph options
-###############
-
-kolla_ceph_use_udev: True
-enable_ceph: "no"
-enable_ceph_mds: "no"
-enable_ceph_nfs: "no"
-enable_ceph_rgw_keystone: "no"
-ceph_cinder_pool_name: "volumes"
-ceph_cinder_backup_pool_name: "backups"
-ceph_glance_pool_name: "images"
-ceph_nova_pool_name: "vms"
-ceph_rule: "default host {{ 'indep' if ceph_pool_type == 'erasure' else 'firstn' }}"
-ceph_pool_pg_num: 8
-ceph_pool_pgp_num: 8
-ceph_enable_cache: "no"
-
-docker_common_options:
-  auth_email: "{{ docker_registry_email }}"
-  auth_password: "{{ docker_registry_password }}"
-  auth_registry: "{{ docker_registry }}"
-  auth_username: "{{ docker_registry_username }}"
-  environment:
-    KOLLA_CONFIG_STRATEGY: "{{ config_strategy }}"
-  restart_policy: "{{ docker_restart_policy }}"
-  restart_retries: "{{ docker_restart_policy_retry }}"
-  graceful_timeout: "{{ docker_graceful_timeout }}"
-
-docker_graceful_timeout: 60
-config_strategy: "COPY_ALWAYS"
-docker_registry_password: "123456"
-
-
-docker_registry_email:
-docker_registry:
-docker_namespace: "kolla"
-docker_registry_username:
-docker_registry_insecure: "{{ 'yes' if docker_registry else 'no' }}"
-docker_runtime_directory: ""
-
-docker_log_max_file: "5"
-docker_log_max_size: "50m"
-#
-# # Valid options are [ no, on-failure, always, unless-stopped ]
-docker_restart_policy: "unless-stopped"
-#
-# # '0' means unlimited retries (applies only to 'on-failure' policy)
-docker_restart_policy_retry: "10"
-default_extra_volumes: []
-kolla_base_distro: "centos"
-distro_python_version_map: {
-  "centos": "2.7",
-  "debian": "3.7",
-  "rhel": "2.7",
-  "ubuntu": "3.6"
-}
-distro_python_version: "{{ distro_python_version_map[kolla_base_distro] }}"
-container_config_directory: "/var/lib/kolla/config_files"
-rgw_port: "6780"
-storage_interface: "{{ network_interface }}"
-cluster_interface: "{{ network_interface }}"
-ceph_cluster_fsid: 3c485d4e-3942-4304-9ccc-50c4554cf5dc
-ceph_rgw_compatibility: "False"
-default_container_dimensions: {}
-
-# Set the store type for ceph OSD
-# Valid options are [ filestore, bluestore]
-ceph_osd_store_type: "bluestore"
-
-# Valid options are [ ext4, btrfs, xfs ]
-ceph_osd_filesystem: "xfs"
-
-# Set to 'yes-i-really-really-mean-it' to force wipe disks with existing partitions for OSDs. Only
-# set if you understand the consequences!
-ceph_osd_wipe_disk: ""
-
-# These are /etc/fstab options. Comma separated, no spaces (see fstab(8))
-ceph_osd_mount_options: "defaults,noatime"
-
-# A requirement for using the erasure-coded pools is you must setup a cache tier
-# Valid options are [ erasure, replicated ]
-ceph_pool_type: "replicated"
-
 
 ###############
 # Nfs Options

@@ -17,12 +17,6 @@ service_cidr: "10.254.0.0/16"
 # is eth0.
 network_interface: "eth0"
 
-
-###############
-# Ceph Options
-###############
-enable_ceph: "no"
-
 ##############
 # Nfs Options
 ##############

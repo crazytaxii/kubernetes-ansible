@@ -28,6 +28,7 @@ class ServiceCheck(object):
     def __init__(self, params):
         self.params = params
         self.service_name = self.params.get('service_name')
+        self.service_type = self.params.get('service_type')
         self.changed = False
 
     def _run(self, cmd):
@@ -38,17 +39,30 @@ class ServiceCheck(object):
         return stdout
 
     def run(self):
-        check_cmd = ['systemctl', 'is-active']
-        check_cmd.append(self.service_name)
-        stdout = self._run(check_cmd)
+        if self.service_type == 'systemd':
+            cmd = ['systemctl', 'is-active']
+            cmd.append(self.service_name)
+        else:
+            cmd = ['docker', 'ps', '--format', '"{{.Status}}"', '-f']
+            filter_item = '='.join(['name', self.service_name])
+            cmd.append(filter_item)
+
+        stdout = self._run(cmd)
         # When service status is not active, that's means the service
         # should be started, set changed to True to notify started action.
-        if not stdout.startswith('active'):
-            self.changed = True
+        if self.service_type == 'systemd':
+            if not stdout.startswith('active'):
+                self.changed = True
+        else:
+            if not stdout.startswith('"Up'):
+                self.changed = True
 
 def main():
     specs = dict(
         service_name=dict(type='str', required=True),
+        service_type=dict(type='str',
+                          choices=['systemd', 'container'],
+                          default='systemd')
     )
 
     module = AnsibleModule(argument_spec=specs, bypass_checks=True)

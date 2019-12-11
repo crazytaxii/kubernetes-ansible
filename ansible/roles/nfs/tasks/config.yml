@@ -21,6 +21,7 @@
 - name: Check nfs servers service status
   service_check:
     service_name: "{{ item }}"
+    service_type: "systemd"
   when:
     - enable_nfs | bool
     - inventory_hostname in groups['storage']

@@ -7,6 +7,7 @@ api_interface_address: "{{ hostvars[inventory_hostname]['ansible_' + api_interfa
 #####################
 # Kubernetes Options
 #####################
+kube_application_dir: "/tmp/kubernetes"
 
 cluster_cidr: "172.30.0.0/16"
 service_cidr: "10.254.0.0/16"

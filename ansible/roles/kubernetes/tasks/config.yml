@@ -109,7 +109,7 @@
     role: kubectl-apply
   loop:
     - {'name': kube-flannel, 'enabled': enable_flanned | bool}
-    - {'name': dashboard, 'enabled': enable_flanned | bool}
+    - {'name': dashboard, 'enabled': enable_dashboard | bool}
     - {'name': metrics-server, 'enabled': enable_metrics_server | bool}
     - {'name': nfs-provisioner, 'enabled': enable_nfs_provisioner | bool}
   when: item.enabled

@@ -1,10 +1,9 @@
 ---
-- name: Install nfs utils
-  vars:
-    nfs_packages:
-      - nfs-utils
-      - rpcbind
+- name: Install nfs utils packages
   yum:
-    name: "{{ nfs_packages }}"
+    name: "{{ item.name }}"
     state: present
-  when: inventory_hostname in groups['storage']
+  when: inventory_hostname in groups[item.group]
+  loop:
+    - {name: rpcbind, group: storage}
+    - {name: nfs-utils, group: kubernetes}

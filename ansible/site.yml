@@ -5,6 +5,7 @@
   gather_facts: false
   hosts:
     - nfs-server
+    - kubernetes
   serial: '{{ kolla_serial|default("0") }}'
   roles:
     - { role: nfs,

@@ -122,6 +122,7 @@
     - {'name': nfs-provisioner, 'enabled': enable_nfs_provisioner | bool}
     - {'name': grafana, 'enabled': enable_grafana | bool}
     - {'name': prometheus, 'enabled': enable_prometheus | bool}
+    - {'name': jenkins, 'enabled': enable_jenkins | bool}
 
 - name: Enable fluentd-elasticsearch for kubernetes cluster
   block:

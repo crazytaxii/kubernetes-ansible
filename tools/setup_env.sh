@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+curl  http://mirrors.aliyun.com/repo/Centos-7.repo -o /etc/yum.repos.d/CentOS-Base.repo
 yum install -y epel-release
 yum install -y git gcc python-setuptools python-devel python-pip vim screen python-devel libffi-devel openssl-devel
 

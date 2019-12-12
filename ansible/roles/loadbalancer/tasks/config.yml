@@ -24,6 +24,3 @@
     - inventory_hostname in groups['kubernetes']
   notify:
     - Restart kube-loadbalancer container
-
-- name: Flush handlers
-  meta: flush_handlers

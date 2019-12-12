@@ -2,28 +2,31 @@
 #####################
 # kubernetes options
 #####################
-enable_kubernetes: "yes"
-enable_kubernetes_ha: "no"
-enable_nfs_provisioner: "no"
+# enable_kubernetes: "yes"
+# enable_kubernetes_ha: "no"
+# enable_nfs_provisioner: "no"
 
-kube_release: 1.16.2
-docker_release: 18.06.2
+# kube_release: 1.16.2
+# docker_release: 18.06.2
 
-dashboard_node_port: 31000
+# dashboard_node_port: 31000
 
-cluster_cidr: "172.30.0.0/16"
-service_cidr: "10.254.0.0/16"
+# cluster_cidr: "172.30.0.0/16"
+# service_cidr: "10.254.0.0/16"
 
 # Network interface is optional, the default vaule
 # is eth0.
-network_interface: "eth0"
+# network_interface: "eth0"
 
 ##############
 # Nfs Options
 ##############
-enable_nfs: "no"
+# enable_nfs: "yes"
+
+# nfs_volume: /data/share
+# nfs_cidr: 172.16.50.0/24
 
 ##################
 # Grafana Options
 ##################
-enable_grafana: "no"
+# enable_grafana: "no"

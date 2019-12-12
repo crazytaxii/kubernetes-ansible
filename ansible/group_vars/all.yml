@@ -38,7 +38,7 @@ nfs_provisioner_images: quay.io/external_storage/nfs-client-provisioner:latest
 ###############
 # Nfs Options
 ###############
-enable_nfs: "no"
+enable_nfs: "yes"
 
 nfs_volume: /data/share
 nfs_cidr: 172.16.50.0/24
@@ -47,4 +47,4 @@ nfs_cidr: 172.16.50.0/24
 ##################
 # Grafana Options
 ##################
-enable_grafana: "yes"
+enable_grafana: "no"

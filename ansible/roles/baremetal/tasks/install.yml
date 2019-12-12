@@ -61,3 +61,14 @@
   run_once: True
   when:
     - enable_kubernetes | bool
+
+- name: Install nfs utils packages
+  yum:
+    name: "{{ item.name }}"
+    state: present
+  loop:
+    - {name: rpcbind, group: storage}
+    - {name: nfs-utils, group: kubernetes}
+  when:
+    - inventory_hostname in groups[item.group]
+    - enable_nfs | bool

@@ -30,3 +30,8 @@
 # Grafana Options
 ##################
 # enable_grafana: "no"
+
+#####################
+# Prometheus Options
+#####################
+# enable_prometheus: "yes"

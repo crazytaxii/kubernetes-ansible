@@ -7,9 +7,14 @@ compute01
 [storage]
 compute01
 
+[registry]
+control01
+
 [baremetal:children]
 control
 compute
+storage
+registry
 
 [kube-master:children]
 control

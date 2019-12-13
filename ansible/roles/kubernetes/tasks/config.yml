@@ -122,12 +122,14 @@
     - name: Copy fluentd-elasticsearch yamls to the first master node
       copy:
         src: fluentd-elasticsearch
-        dest: /tmp/
+        dest: "{{ kube_application_dir }}"
+      register: kube_apply_result
 
     - name: Apply fluentd-elasticsearch
       kube_toolbox:
         module_name: kubectl
-        module_args: "apply -f /tmp/fluentd-elasticsearch"
+        module_args: "apply -f {{kube_application_dir }}/fluentd-elasticsearch"
+      when: kube_apply_result.changed | bool
   run_once: True
   when:
     - inventory_hostname in groups['kube-master']

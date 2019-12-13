@@ -7,7 +7,8 @@ aliyun_repo: "registry.cn-hangzhou.aliyuncs.com/google_containers"
 
 registry_address: "{{ hostvars[groups['registry'][0]]['ansible_' + api_interface]['ipv4']['address'] }}"
 registry_port: 4000
-registry_repo: "{{ registry_address }}:{{ registry_port }}"
+registry_namespace: "kubernetes"
+registry_repo: "{{ registry_address }}:{{ registry_port }}/{{ registry_namespace }}"
 
 #####################
 # Kubernetes Options

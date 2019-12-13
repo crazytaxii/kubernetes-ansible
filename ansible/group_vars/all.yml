@@ -3,8 +3,11 @@ network_interface: "eth0"
 api_interface: "{{ network_interface }}"
 api_interface_address: "{{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}"
 
-ALIYUMCS: "registry.cn-hangzhou.aliyuncs.com/google_containers"
+aliyun_repo: "registry.cn-hangzhou.aliyuncs.com/google_containers"
+
 registry_address: "{{ hostvars[groups['registry'][0]]['ansible_' + api_interface]['ipv4']['address'] }}"
+registry_port: 4000
+registry_repo: "{{ registry_address }}:{{ registry_port }}"
 
 #####################
 # Kubernetes Options
@@ -41,7 +44,7 @@ metrics_server_images:
 
 nfs_provisioner_images: quay.io/external_storage/nfs-client-provisioner:latest
 
-kube_repo: "{{ registry_address if enable_registry | bool else ALIYUMCS }}"
+kube_repo: "{{ registry_repo if enable_registry | bool else aliyun_repo }}"
 
 kube_applications:
   - name: kube-flannel

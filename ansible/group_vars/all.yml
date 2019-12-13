@@ -12,6 +12,8 @@ kube_application_dir: "/tmp/kubernetes"
 cluster_cidr: "172.30.0.0/16"
 service_cidr: "10.254.0.0/16"
 
+enable_registry: "yes"
+
 enable_flanned: "yes"
 enable_kubernetes: "yes"
 enable_kubernetes_ha: "no"
@@ -36,6 +38,10 @@ metrics_server_images:
   - k8s.gcr.io/addon-resizer:1.8.6
 
 nfs_provisioner_images: quay.io/external_storage/nfs-client-provisioner:latest
+
+ALIYUMCS: 'registry.cn-hangzhou.aliyuncs.com/google_containers'
+registry_address: "{{ hostvars[groups['registry'][0]]['ansible_' + api_interface]['ipv4']['address'] }}"
+kube_repo: "{{ registry_address if enable_registry | bool else ALIYUMCS }}"
 
 kube_applications:
   - name: kube-flannel

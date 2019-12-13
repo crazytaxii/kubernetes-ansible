@@ -24,8 +24,6 @@ import subprocess
 
 import docker
 
-ALIYUMCS = 'registry.cn-hangzhou.aliyuncs.com/google_containers'
-
 master_images = ['kube-apiserver',
                  'kube-controller-manager',
                  'kube-scheduler',
@@ -48,6 +46,7 @@ class DockerWorker(object):
         self.changed = False
         self.result = {}
         self.kube_image = self.params.get('kube_image')
+        self.kube_repo = self.params.get('kube_repo')
         self.kube_version = self.params.get('kube_version')
         self.dc = get_docker_client()
 
@@ -62,7 +61,7 @@ class DockerWorker(object):
             image_name = self.kube_image.split('/')[1]
 
             # NOTE(caoyingjun) Pull the images from ali repo.
-            ali_image = '/'.join([ALIYUMCS, image_name])
+            ali_image = '/'.join([self.kube_repo, image_name])
             self.dc.pull(ali_image)
             self.dc.tag(ali_image, self.kube_image, force=True)
             if self.params.get('cleanup'):
@@ -101,6 +100,7 @@ def main():
 
     specs = dict(
         kube_image=dict(type='str', default=''),
+        kube_repo=dict(type='str', required=True),
         kube_version=dict(type='str', required=True),
         image_action=dict(type='str', default='pull'),
         cleanup=dict(type='bool', default=True),

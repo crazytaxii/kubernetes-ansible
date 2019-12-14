@@ -1,20 +1,4 @@
 ---
-- name: Drain the kube worker from kubernetes cluster
-  kube_toolbox:
-    module_name: kubectl
-    module_args: "drain {{ item }} --delete-local-data --force --ignore-daemonsets"
-  delegate_to: "{{ groups['kube-master'][0] }}"
-  run_once: True
-  loop: "{{ groups['kube-worker'] }}"
-
-- name: Remove the kube worker from kubernetes cluster
-  kube_toolbox:
-    module_name: kubectl
-    module_args: "delete node {{ item }}"
-  delegate_to: "{{ groups['kube-master'][0] }}"
-  run_once: True
-  loop: "{{ groups['kube-worker'] }}"
-
 - name: Reset the kubernetes cluster
   kube_toolbox:
     module_name: kubeadm

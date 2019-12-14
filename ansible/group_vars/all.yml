@@ -67,7 +67,11 @@ kube_applications:
 apply_repo: "{{ registry_address }}:{{ registry_port }}"
 
 flannel_url: "{{ apply_repo if enable_registry | bool else 'quay.io' }}"
-flannel_image: "{{ flannel_url }}/coreos/flannel:v0.11.0-amd64"
+flannel_amd64_image: "{{ flannel_url }}/coreos/flannel:v0.11.0-amd64"
+flannel_arm64_image: "{{ flannel_url }}/coreos/flannel:v0.11.0-arm64"
+flannel_arm_image: "{{ flannel_url }}/coreos/flannel:v0.11.0-arm"
+flannel_ppc64le_image: "{{ flannel_url }}/coreos/flannel:v0.11.0-ppc64le"
+flannel_s390x_image: "{{ flannel_url }}/coreos/flannel:v0.11.0-s390x"
 
 dashboard_url: "{{ apply_repo + '/kubernetes' if enable_registry | bool else aliyun_repo }}"
 dashboard_image: "{{ dashboard_url }}/kubernetes-dashboard-amd64:v1.10.1"

@@ -86,7 +86,7 @@ spec:
     spec:
       serviceAccountName: elasticsearch-logging
       containers:
-      - image: quay.io/fluentd_elasticsearch/elasticsearch:v7.2.0
+      - image: {{ elasticsearch_image }}
         name: elasticsearch-logging
         imagePullPolicy: Always
         resources:
@@ -117,7 +117,7 @@ spec:
       # If your OS already sets up this number to a higher value, feel free
       # to remove this init container.
       initContainers:
-      - image: alpine:3.6
+      - image: {{ alpine_image }}
         command: ["/sbin/sysctl", "-w", "vm.max_map_count=262144"]
         name: elasticsearch-logging-init
         securityContext:
@@ -478,7 +478,8 @@ data:
     <source>
       @id journald-container-runtime
       @type systemd
-      matches [{ "_SYSTEMD_UNIT": "{{ fluentd_container_runtime_service }}.service" }]
+      {% raw %}matches [{ "_SYSTEMD_UNIT": "{{ fluentd_container_runtime_service }}.service" }]{% endraw %}
+
       <storage>
         @type local
         persistent true
@@ -676,7 +677,7 @@ spec:
       serviceAccountName: fluentd-es
       containers:
       - name: fluentd-es
-        image: quay.io/fluentd_elasticsearch/fluentd:v2.7.0
+        image: {{ fluentd_image }}
         env:
         - name: FLUENTD_ARGS
           value: --no-supervisor -q
@@ -728,7 +729,7 @@ spec:
     spec:
       containers:
       - name: kibana-logging
-        image: docker.elastic.co/kibana/kibana-oss:7.2.0
+        image: {{ kibana_image }}
         resources:
           # need more cpu upon initialization, therefore burstable class
           limits:

@@ -39,12 +39,6 @@ docker_release: 18.06.2
 
 node_config_directory: "/etc/kubernetes-ansible/"
 
-metrics_server_images:
-  - k8s.gcr.io/metrics-server-amd64:v0.3.6
-  - k8s.gcr.io/addon-resizer:1.8.6
-
-nfs_provisioner_images: quay.io/external_storage/nfs-client-provisioner:latest
-
 kube_repo: "{{ registry_repo if enable_registry | bool else aliyun_repo }}"
 
 kube_applications:
@@ -62,6 +56,33 @@ kube_applications:
     enabled: "{{ enable_prometheus | bool }}"
   - name: jenkins
     enabled: "{{ enable_jenkins | bool }}"
+
+
+#####################
+# Application Images
+#####################
+
+apply_repo: "{{ registry_address }}:{{ registry_port }}"
+
+flannel_url: "{{ apply_repo if enable_registry | bool else 'quay.io'}}"
+flannel_image: "{{ flannel_url }}/coreos/flannel:v0.11.0-amd64"
+
+dashboard_url: "{{ apply_repo if enable_registry | bool else 'registry.cn-hangzhou.aliyuncs.com/google_containers'}}"
+dashboard_image: "{{ dashboard_url }}/kubernetes-dashboard-amd64:v1.10.1"
+
+metrics_server_images:
+  - k8s.gcr.io/metrics-server-amd64:v0.3.6
+  - k8s.gcr.io/addon-resizer:1.8.6
+
+nfs_provisioner_url: "{{ apply_repo if enable_registry | bool else 'quay.io'}}"
+nfs_provisioner_image: "{{ nfs_provisioner_url }}/external_storage/nfs-client-provisioner:latest"
+
+grafana_url: "{{ apply_repo if enable_registry | bool else 'grafana'}}"
+grafana_image: "{{ grafana_url }}/grafana"
+
+prometheus_url: "{{ apply_repo if enable_registry | bool else 'prom'}}"
+prometheus_image: "{{ prometheus_url }}/prometheus:v2.0.0"
+node_exporter_image: "{{ prometheus_url }}/node-exporter"
 
 
 ###############

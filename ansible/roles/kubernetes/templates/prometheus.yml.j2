@@ -15,7 +15,7 @@ spec:
         k8s-app: node-exporter
     spec:
       containers:
-      - image: prom/node-exporter
+      - image: {{ node_exporter_image }}
         name: node-exporter
         ports:
         - containerPort: 9100
@@ -264,7 +264,7 @@ spec:
         app: prometheus
     spec:
       containers:
-      - image: prom/prometheus:v2.0.0
+      - image: {{ prometheus_image }}
         name: prometheus
         command:
         - "/bin/prometheus"

@@ -133,6 +133,7 @@ kubernetes 清理集群
    registry仓库压缩包: https://hub.docker.com/repository/docker/jacky06/kube-registry
 
 .. code-block:: ini
+
    在未开启私有仓库的情况下，kubernetes集群将从官方仓库获取镜像.
    在开启私有仓库，且联网的情况下，将自动下载并设置私有仓库，kubernetes集群优先从私有仓库获取所需镜像.
    在未联网时，需要手动获取registry压缩包，并放在/tmp下，然后自动完成私有仓库的设置，并使用私有仓库镜像(开发中).

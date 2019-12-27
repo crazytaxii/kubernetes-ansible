@@ -6,7 +6,7 @@ enable_kubernetes: "yes"
 #enable_kubernetes_ha: "no"
 #enable_nfs_provisioner: "yes"
 
-#enable_registry: "yes"
+#enable_registry: "no"
 
 kube_release: 1.16.2
 docker_release: 18.06.2

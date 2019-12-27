@@ -18,7 +18,7 @@ kube_application_dir: "/tmp/kubernetes"
 cluster_cidr: "172.30.0.0/16"
 service_cidr: "10.254.0.0/16"
 
-enable_registry: "yes"
+enable_registry: "no"
 
 enable_flanned: "yes"
 enable_kubernetes: "yes"

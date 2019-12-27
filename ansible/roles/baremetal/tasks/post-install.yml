@@ -5,6 +5,7 @@
     service_type: "container"
   run_once: True
   when:
+    - enable_registry | bool
     - inventory_hostname in groups['registry']
   notify:
     - Restart kube-registry service

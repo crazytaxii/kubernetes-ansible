@@ -19,7 +19,7 @@ cluster_cidr: "172.30.0.0/16"
 service_cidr: "10.254.0.0/16"
 
 cluster_gateway: "172.30.0.1"
-node_switch_cidr: "100.64.0.0/16"
+node_switch_cidr: "172.31.0.0/16"
 
 enable_registry: "no"
 

@@ -102,8 +102,8 @@ kibana_image: "{{ kibana_url }}/kibana/kibana-oss:7.2.0"
 elasticsearch_url: "{{ apply_repo if enable_registry | bool else 'quay.io' }}"
 elasticsearch_image: "{{ elasticsearch_url }}/fluentd_elasticsearch/elasticsearch:v7.2.0"
 
-alpine_url: "{{ apply_repo + '/fluentd_elasticsearch' if enable_registry | bool else '' }}"
-alpine_image: "{{ alpine_url }}/alpine:3.6"
+alpine_url: "{{ apply_repo + '/fluentd_elasticsearch/' if enable_registry | bool else '' }}"
+alpine_image: "{{ alpine_url }}alpine:3.6"
 
 
 ###############

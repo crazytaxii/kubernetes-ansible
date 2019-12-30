@@ -447,9 +447,9 @@ spec:
           command:
           - /kube-ovn/start-controller.sh
           args:
-          - --default-cidr=10.16.0.0/16
-          - --default-gateway=10.16.0.1
-          - --node-switch-cidr=100.64.0.0/16
+          - --default-cidr={{ cluster_cidr }}
+          - --default-gateway={{ cluster_gateway }}
+          - --node-switch-cidr={{ node_switch_cidr }}
           env:
             - name: POD_NAME
               valueFrom:

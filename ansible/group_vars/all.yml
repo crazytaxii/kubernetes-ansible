@@ -31,6 +31,7 @@ enable_dashboard: "yes"
 enable_prometheus: "yes"
 enable_efk: "yes"
 enable_jenkins: "no"
+enable_ingress_nginx: "no"
 
 dashboard_node_port: 31000
 
@@ -62,6 +63,8 @@ kube_applications:
     enabled: "{{ enable_jenkins | bool }}"
   - name: efk
     enabled: "{{ enable_efk | bool }}"
+  - name: ingress-nginx
+    enabled: "{{ enable_ingress_nginx | bool }}"
 
 
 #####################

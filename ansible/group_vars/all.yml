@@ -18,6 +18,9 @@ kube_application_dir: "/tmp/kubernetes"
 cluster_cidr: "172.30.0.0/16"
 service_cidr: "10.254.0.0/16"
 
+cluster_gateway: "172.30.0.1"
+node_switch_cidr: "172.31.0.0/16"
+
 enable_registry: "no"
 
 enable_flanned: "yes"
@@ -25,11 +28,10 @@ enable_ovn: "{{ not enable_flanned | bool }}"
 enable_kubernetes: "yes"
 enable_kubernetes_ha: "no"
 enable_metrics_server: "yes"
-enable_fluentd_elasticsearch: "yes"
 enable_nfs_provisioner: "yes"
 enable_dashboard: "yes"
 enable_prometheus: "yes"
-enable_efk: "yes"
+enable_efk: "no"
 enable_jenkins: "no"
 enable_ingress_nginx: "no"
 
@@ -105,8 +107,8 @@ kibana_image: "{{ kibana_url }}/kibana/kibana-oss:7.2.0"
 elasticsearch_url: "{{ apply_repo if enable_registry | bool else 'quay.io' }}"
 elasticsearch_image: "{{ elasticsearch_url }}/fluentd_elasticsearch/elasticsearch:v7.2.0"
 
-alpine_url: "{{ apply_repo + '/fluentd_elasticsearch' if enable_registry | bool else '' }}"
-alpine_image: "{{ alpine_url }}/alpine:3.6"
+alpine_url: "{{ apply_repo + '/fluentd_elasticsearch/' if enable_registry | bool else '' }}"
+alpine_image: "{{ alpine_url }}alpine:3.6"
 
 
 ###############
